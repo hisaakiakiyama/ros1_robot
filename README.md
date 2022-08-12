@@ -11,9 +11,13 @@
 ## これまでの動き
 - 0723
     - 上司へ計画を相談→購入ロボット決定(後述)(~0808)
-- 0809
+- 0811
     - DS4のBluetooth接続
     - ROSノード構造の決定
+- 0812
+    - PCA9685の動作概要把握
+    - ros-pwm-pca9685の概要把握
+    - 
 ## 次の動き
 - 0808
     - お盆休み中にDS4で動くラジコンを完成させる(詳細は後日整理)
@@ -22,7 +26,14 @@
 - 0809
     - ~~PCとラズパイ3のROS連携(0812)~~ (0812done)
     - PCA9685のROSでの制御(0812)
+        - ~~ros-pwm-pca9685の概要理解~~ done
+        - ros-pwm-pca9685に合わせてarrayをpub(詳細は後述)
+        - gpioを制御
+        - モータの制御履歴(回転方向(bool?)，回転速度(int64?))をpub
     - joy情報をmotor_ctlに渡す(0813)
+        - joy情報のsub
+        - joy情報からモータ回転方向，回転速度を計算
+        - publisherへ受け渡し
     - コントローラの割り当て検討(0813)
     - 動作確認(0814)
     - 細かいデバッグ(0815)
@@ -33,6 +44,7 @@
 ### 車体情報
 https://osoyoo.com/2020/08/01/osoyoo-raspberry-pi-v2-0-car-introduction/
 ### ROSノード構造
+![](ros_node.png)
 
 ## 各系統について
 ### ROS1
@@ -91,6 +103,8 @@ left
 rightもしくはleftを0~65535で設定し，pubすることで0%~100%の出力となる．  
 -1で更新なしとなる．
 
+rosノードのsudo権限について  
+https://akeblo.blogspot.com/2017/09/rosnoderoot.html
 ### ロボット全体
 
 #### GPIO制御
@@ -98,7 +112,6 @@ rightもしくはleftを0~65535で設定し，pubすることで0%~100%の出力
 ### 表示系
 #### フルカラーLED
 使用LED
-https://akizukidenshi.com/catalog/g/gI-02476/
+https://akizukidenshi.com/catalog/g/gI-02476/  
 参考URL
 https://www.souichi.club/raspberrypi/color-led/
-- 
