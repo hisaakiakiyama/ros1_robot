@@ -18,7 +18,7 @@ int main (int argc, char **argv) {
     motor_log.data = {0,0,0,0};
     ros::init(argc, argv, "motor_ctl_talker");
     ros::NodeHandle n;
-    ros::Publisher motor_ctl = n.advertise<std_msgs::Int32MultiArray>("motor_ctl", 10);
+    ros::Publisher motor_ctl = n.advertise<std_msgs::Int32MultiArray>("command", 10);
     if(wiringPiSetupGpio() == -1) return 1;
     pinMode(right_1,OUTPUT);
     pinMode(right_2,OUTPUT);
