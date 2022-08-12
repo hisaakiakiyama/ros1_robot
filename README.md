@@ -27,10 +27,11 @@
     - ~~PCとラズパイ3のROS連携(0812)~~ (0812done)
     - PCA9685のROSでの制御(0812)
         - ~~ros-pwm-pca9685の概要理解~~ done
-        - ros-pwm-pca9685に合わせてarrayをpub(詳細は後述)
-        - gpioを制御
+        - ~~ros-pwm-pca9685に合わせてarrayをpub(詳細は後述)~~ done
+        - ~~gpioを制御~~ done
         - モータの制御履歴(回転方向(bool?)，回転速度(int64?))をpub
     - joy情報をmotor_ctlに渡す(0813)
+        - ds4のbluetooth接続
         - joy情報のsub
         - joy情報からモータ回転方向，回転速度を計算
         - publisherへ受け渡し
