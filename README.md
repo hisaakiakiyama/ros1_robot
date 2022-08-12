@@ -20,7 +20,7 @@
     - ~~DS4のBluetooth接続~~ (0809done)
     - ~~ROSノード構造の決定~~ (0809done)
 - 0809
-    - PCとラズパイ3のROS連携(0812)
+    - ~~PCとラズパイ3のROS連携(0812)~~ (0812done)
     - PCA9685のROSでの制御(0812)
     - joy情報をmotor_ctlに渡す(0813)
     - コントローラの割り当て検討(0813)
@@ -49,7 +49,12 @@ https://qiita.com/Yuya-Shimizu/items/4bed435e65cefc6d2df1
 - BlueZ(Bluetooth) doing
 
 #### raspi3-PC通信
+参考ページ  
+https://qiita.com/srs/items/7d4aeb5e44138f97c770
+https://qiita.com/srs/items/309a16ae331da563c2e3  
 
+pc側は通常通りの運用でOK．ラズパイは.bashrcに設定を書き込み済み．  
+pcでのroscore起動を忘れないこと．
 ### ロボット全体
 
 
