@@ -10,16 +10,29 @@
 
 ## これまでの動き
 - 0723
-    - 上司へ計画を相談→購入ロボット決定(後述)(~0726)
-
+    - 上司へ計画を相談→購入ロボット決定(後述)(~0808)
+- 0809
+    - DS4のBluetooth接続
+    - ROSノード構造の決定
 ## 次の動き
-
+- 0808
+    - お盆休み中にDS4で動くラジコンを完成させる(詳細は後日整理)
+    - ~~DS4のBluetooth接続~~ (0809done)
+    - ~~ROSノード構造の決定~~ (0809done)
+- 0809
+    - PCとラズパイ3のROS連携(0812)
+    - PCA9685のROSでの制御(0812)
+    - joy情報をmotor_ctlに渡す(0813)
+    - コントローラの割り当て検討(0813)
+    - 動作確認(0814)
+    - 細かいデバッグ(0815)
 ## 仕様
 ### 全体仕様
 基本的にはROS2ロボットと同じ  
 ![](system.png)
 ### 車体情報
 https://osoyoo.com/2020/08/01/osoyoo-raspberry-pi-v2-0-car-introduction/
+### ROSノード構造
 
 ## 各系統について
 ### ROS1
@@ -30,6 +43,11 @@ https://osoyoo.com/2020/08/01/osoyoo-raspberry-pi-v2-0-car-introduction/
 http://wiki.ros.org/ROS/Tutorials
 #### DualShock4-RaspberryPi3通信
 https://qiita.com/Yuya-Shimizu/items/4bed435e65cefc6d2df1
+使用ライブラリ
+- ds4drv(ds4用のドライバ) done
+- joy(ROS) done
+- BlueZ(Bluetooth) doing
+
 #### raspi3-PC通信
 
 ### ロボット全体
