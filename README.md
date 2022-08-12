@@ -41,23 +41,57 @@ https://osoyoo.com/2020/08/01/osoyoo-raspberry-pi-v2-0-car-introduction/
 
 公式チュートリアルを参考にする．  
 http://wiki.ros.org/ROS/Tutorials
-#### DualShock4-RaspberryPi3通信
+### DualShock4-RaspberryPi3通信
 https://qiita.com/Yuya-Shimizu/items/4bed435e65cefc6d2df1
 使用ライブラリ
 - ds4drv(ds4用のドライバ) done
 - joy(ROS) done
 - BlueZ(Bluetooth) doing
 
-#### raspi3-PC通信
+### raspi3-PC通信
 参考ページ  
 https://qiita.com/srs/items/7d4aeb5e44138f97c770
 https://qiita.com/srs/items/309a16ae331da563c2e3  
 
 pc側は通常通りの運用でOK．ラズパイは.bashrcに設定を書き込み済み．  
 pcでのroscore起動を忘れないこと．
+
+### PCA9685制御
+#### モータドライバ情報
+PCA9685.pdf  
+#### 配線
+![](2022-08-12-12-17-54.png)
+![](2022-08-12-12-16-14.png)
+![](2022-08-12-12-16-34.png)
+
+#### 使用ライブラリ
+https://github.com/dheera/ros-pwm-pca9685
+https://www.sato-susumu.com/entry/pwm_pca9685
+
+<b>モータ回転方向→gpioのON/OFFで制御</b>
+right
+| 22 | 27 | 挙動 |
+|----|----|----|
+| 0 | 0 ||
+| 1 | 0 |正転|
+| 0 | 1 |逆転|
+| 1 | 1 |ブレーキ|
+
+left
+| 24 | 23 | 挙動 |
+|----|----|----|
+| 0 | 0 ||
+| 1 | 0 |正転|
+| 0 | 1 |逆転|
+| 1 | 1 |ブレーキ|
+
+<b>モータ回転速度→pwmで制御</b>
+>/command std_msgs/Int32MultiArray -1 '{data:[left, right, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]}'
+
+rightもしくはleftを0~65535で設定し，pubすることで0%~100%の出力となる．  
+-1で更新なしとなる．
+
 ### ロボット全体
-
-
 
 #### GPIO制御
 
