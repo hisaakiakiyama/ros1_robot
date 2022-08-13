@@ -1,5 +1,7 @@
 #include <ros/ros.h>
 #include <std_msgs/Int32MultiArray.h>
+#include <std_msgs/Float32MultiArray.h>
+#include <sensor_msgs/Joy.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,14 +13,41 @@
 #define left_2  23
 
 std_msgs::Int32MultiArray command;//ros-pwm-pca9685
-std_msgs::Int32MultiArray motor_log; //motor log
+std_msgs::Float32MultiArray motor_log; //motor log
+
+ros::Publisher motor_ctl;
+ros::Publisher motor_logger;
+
+void joy_callback(const sensor_msgs::Joy& joy_msg){
+    if(joy_msg.axes[1] > 0){//左スティック上下
+        motor_log.data[0] = 1;
+        motor_log.data[1] = joy_msg.axes[1];
+    }else{
+        motor_log.data[0] = 0;
+        motor_log.data[1] = -1 * joy_msg.axes[1];
+    }
+
+    if(joy_msg.axes[5] > 0){//右スティック上下
+        motor_log.data[2] = 1;
+        motor_log.data[3] = joy_msg.axes[5];
+    }else{
+        motor_log.data[2] = 0;
+        motor_log.data[3] = -1 * joy_msg.axes[5];
+    }
+}
 
 int main (int argc, char **argv) {
     command.data.resize(16);
+    motor_log.data.resize(4);
     motor_log.data = {0,0,0,0};
+    //nodeの起動
     ros::init(argc, argv, "motor_ctl_talker");
     ros::NodeHandle n;
-    ros::Publisher motor_ctl = n.advertise<std_msgs::Int32MultiArray>("command", 10);
+    //pubの定義
+    motor_ctl = n.advertise<std_msgs::Int32MultiArray>("command", 10);
+    motor_logger = n.advertise<std_msgs::Float32MultiArray>("motor_log", 10);
+    //subの定義
+    ros::Subscriber joy_sub = n.subscribe("joy",10,joy_callback);
     if(wiringPiSetupGpio() == -1) return 1;
     pinMode(right_1,OUTPUT);
     pinMode(right_2,OUTPUT);
@@ -30,28 +59,9 @@ int main (int argc, char **argv) {
 
     ros::Rate loop_rate(10);
     while (ros::ok()){
-        //joy情報の受信，整理
-        // if(){//右モータ正転，逆転，ブレーキ
-            motor_log.data[0] = 1;
-        // }else if(){
-        //     motor_log.data[0] = 0;
-        // }else(){
-        //     motor_log.data[0] = 2;
-        // }
-        
-        // if(){//左モータ正転，逆転，ブレーキ
-            motor_log.data[1] = 0;
-        // }else if(){
-        //     motor_log.data[1] = 0;
-        // }else(){
-        //     motor_log.data[1] = 2;
-        // }
-
         //right speed, left speedの更新
-        int hoge = 65535/2;
-        int piyo = 65535/2;
-        right_speed = hoge;
-        left_speed  = piyo;
+        int left_speed = 65535*motor_log.data[1];
+        int right_speed = 65535*motor_log.data[3];
 
         //gpio(回転方向)の更新
         if(motor_log.data[0] == 1){//右正転
@@ -97,6 +107,7 @@ int main (int argc, char **argv) {
         
         //command array publish
         motor_ctl.publish(command);//motor_ctl publish
+        motor_logger.publish(motor_log);//motor_log publish
         ros::spinOnce();
         loop_rate.sleep();
         ROS_INFO("published array\n");
