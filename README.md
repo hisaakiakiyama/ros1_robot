@@ -29,12 +29,12 @@
         - ~~ros-pwm-pca9685の概要理解~~ done
         - ~~ros-pwm-pca9685に合わせてarrayをpub(詳細は後述)~~ done
         - ~~gpioを制御~~ done
-        - モータの制御履歴(回転方向(bool?)，回転速度(int64?))をpub
+        - ~~モータの制御履歴(回転方向(bool?)，回転速度(int64?))をpub~~ done
     - joy情報をmotor_ctlに渡す(0813)
-        - ds4のbluetooth接続
-        - joy情報のsub
-        - joy情報からモータ回転方向，回転速度を計算
-        - publisherへ受け渡し
+        - ~~ds4のbluetooth接続~~ (0813done)
+        - ~~joy情報のsub~~
+        - ~~joy情報からモータ回転方向，回転速度を計算~~
+        - ~~publisherへ受け渡し~~
     - コントローラの割り当て検討(0813)
     - 動作確認(0814)
     - 細かいデバッグ(0815)
@@ -56,10 +56,12 @@ https://osoyoo.com/2020/08/01/osoyoo-raspberry-pi-v2-0-car-introduction/
 http://wiki.ros.org/ROS/Tutorials
 ### DualShock4-RaspberryPi3通信
 https://qiita.com/Yuya-Shimizu/items/4bed435e65cefc6d2df1
+https://www.anypalette.com/ja/posts/20211121_setup-rasberrypie/
+
 使用ライブラリ
 - ds4drv(ds4用のドライバ) done
 - joy(ROS) done
-- BlueZ(Bluetooth) doing
+- BlueZ(Bluetooth) done
 
 ### raspi3-PC通信
 参考ページ  
@@ -80,6 +82,8 @@ PCA9685.pdf
 #### 使用ライブラリ
 https://github.com/dheera/ros-pwm-pca9685
 https://www.sato-susumu.com/entry/pwm_pca9685
+
+rosparam set /pca9685_node/timeout "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]"
 
 <b>モータ回転方向→gpioのON/OFFで制御</b>
 right
