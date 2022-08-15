@@ -116,10 +116,17 @@ rightもしくはleftを0~65535で設定し，pubすることで0%~100%の出力
 
 rosノードのsudo権限について  
 https://akeblo.blogspot.com/2017/09/rosnoderoot.html
+
+### ライントレース
+#### 配線  
+![](2022-08-15-11-32-43.png)
+#### センサ仕様
+
+
 ### ロボット全体
 
 #### GPIO制御
-
+wiringpiを使用
 ### 表示系
 #### フルカラーLED
 使用LED
