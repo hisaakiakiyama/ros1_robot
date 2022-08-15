@@ -1,0 +1,5 @@
+<launch>
+  <node name="motor_ctl"   pkg="motor_ctl" type="motor_ctl" />
+  <node name="joy_sub" pkg="joy" type="joy_node" />
+  <node name="pca9685" pkg="pwm_pca9685" type="pca9685_node" />
+</launch>
