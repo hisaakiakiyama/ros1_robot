@@ -84,7 +84,7 @@ PCA9685.pdf
 ![](2022-08-12-12-17-54.png)
 ![](2022-08-12-12-16-14.png)
 ![](2022-08-12-12-16-34.png)
-
+![](2022-08-15-12-40-55.png)
 #### 使用ライブラリ
 https://github.com/dheera/ros-pwm-pca9685
 https://www.sato-susumu.com/entry/pwm_pca9685
@@ -116,6 +116,10 @@ rightもしくはleftを0~65535で設定し，pubすることで0%~100%の出力
 
 rosノードのsudo権限について  
 https://akeblo.blogspot.com/2017/09/rosnoderoot.html
+
+<b>サーボ操作について</b>
+pca9685本体の仕様を理解して上記のパッケージを使用or別のライブラリを探す．  
+要調査&検討
 ### ロボット全体
 
 #### GPIO制御
