@@ -19,27 +19,51 @@ ros::Publisher motor_ctl;
 ros::Publisher motor_logger;
 
 void joy_callback(const sensor_msgs::Joy& joy_msg){
-    if(joy_msg.axes[1] > 0){//左スティック上下
-        motor_log.data[0] = 1;
-        motor_log.data[1] = joy_msg.axes[1];
+    if(joy_msg.buttons[5] == 1){//R1が押されている間は左スティックのみで操作
+        if(abs(joy_msg.axes[0]) < 0.1){//直進
+            if(joy_msg.axes[1] > 0){//前進
+                motor_log.data[0] = motor_log.data[2] = 1;
+                motor_log.data[1] = motor_log.data[3] = abs(joy_msg.axes[1]);
+            }else{//後退
+                motor_log.data[0] = motor_log.data[2] = 0;
+                motor_log.data[1] = motor_log.data[3] = abs(joy_msg.axes[1]);
+            }
+        }else if(abs(joy_msg.axes[1]) < 0.15){//信地旋回
+            if(joy_msg.axes[0] > 0){//左
+                motor_log.data[0] = motor_log.data[2] = 1;
+                motor_log.data[3] = abs(joy_msg.axes[0]);
+                motor_log.data[1] = 0;
+            }else{//右
+                motor_log.data[0] = motor_log.data[2] = 1;
+                motor_log.data[1] = abs(joy_msg.axes[0]);
+                motor_log.data[3] = 0;
+            }
+        }else{
+            ROS_INFO("doing...\n");
+        }
     }else{
-        motor_log.data[0] = 0;
-        motor_log.data[1] = -1 * joy_msg.axes[1];
-    }
+        if(joy_msg.axes[1] > 0){//左スティック上下
+            motor_log.data[0] = 1;
+            motor_log.data[1] = abs(joy_msg.axes[1]);
+        }else{
+            motor_log.data[0] = 0;
+            motor_log.data[1] = abs(joy_msg.axes[1]);
+        }
 
-    if(joy_msg.axes[5] > 0){//右スティック上下
-        motor_log.data[2] = 1;
-        motor_log.data[3] = joy_msg.axes[5];
-    }else{
-        motor_log.data[2] = 0;
-        motor_log.data[3] = -1 * joy_msg.axes[5];
+        if(joy_msg.axes[4] > 0){//右スティック上下
+            motor_log.data[2] = 1;
+            motor_log.data[3] = abs(joy_msg.axes[4]);
+        }else{
+            motor_log.data[2] = 0;
+            motor_log.data[3] = abs(joy_msg.axes[4]);
+        }
     }
 }
 
 int main (int argc, char **argv) {
     command.data.resize(16);
     motor_log.data.resize(4);
-    motor_log.data = {0,0,0,0};
+    motor_log.data = {0,0,0,0};//左正逆,左回転速度,右正逆,右回転速度
     //nodeの起動
     ros::init(argc, argv, "motor_ctl_talker");
     ros::NodeHandle n;
@@ -64,21 +88,10 @@ int main (int argc, char **argv) {
         int right_speed = 65535*motor_log.data[3];
 
         //gpio(回転方向)の更新
-        if(motor_log.data[0] == 1){//右正転
-            digitalWrite(right_1,HIGH);
-            digitalWrite(right_2,LOW);
-        }else if(motor_log.data[0] == 0){//右逆転
-            digitalWrite(right_1,LOW);
-            digitalWrite(right_2,HIGH);
-        }else{//右ブレーキ
-            digitalWrite(right_1,HIGH);
-            digitalWrite(right_2,HIGH);
-        }
-
-        if(motor_log.data[2] == 1){//左正転
+        if(motor_log.data[0] == 1){//左正転
             digitalWrite(left_1,HIGH);
             digitalWrite(left_2,LOW);
-        }else if(motor_log.data[2] == 0){//左逆転
+        }else if(motor_log.data[0] == 0){//左逆転
             digitalWrite(left_1,LOW);
             digitalWrite(left_2,HIGH);
         }else{//左ブレーキ
@@ -86,6 +99,16 @@ int main (int argc, char **argv) {
             digitalWrite(left_2,HIGH);
         }
         
+        if(motor_log.data[2] == 1){//右正転
+            digitalWrite(right_1,HIGH);
+            digitalWrite(right_2,LOW);
+        }else if(motor_log.data[2] == 0){//右逆転
+            digitalWrite(right_1,LOW);
+            digitalWrite(right_2,HIGH);
+        }else{//右ブレーキ
+            digitalWrite(right_1,HIGH);
+            digitalWrite(right_2,HIGH);
+        }
 
         //command arrayの更新
         command.data[0] = left_speed;
